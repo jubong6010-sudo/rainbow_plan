@@ -1,0 +1,8 @@
+{
+  "name": "Life Planner",
+  "description": "사무 생산성 향상을 위한 손글씨 지원 모바일 일정 관리 앱",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
