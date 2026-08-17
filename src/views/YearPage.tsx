@@ -77,6 +77,10 @@ export default function YearPage({ currentDate, setCurrentDate, setView, penStat
     setCurrentDate(addYears(currentDate, 1));
   };
 
+  const handleThisYear = () => {
+    setCurrentDate(new Date());
+  };
+
   const handleMonthClick = (monthIdx: number) => {
     const targetDate = new Date(currentYear, monthIdx, 1);
     setCurrentDate(targetDate);
@@ -122,15 +126,15 @@ export default function YearPage({ currentDate, setCurrentDate, setView, penStat
   return (
     <div className="h-full flex flex-col relative border-4 border-green-800 rounded-3xl bg-white shadow-md overflow-hidden">
       {/* Top Header Section */}
-      <div className="relative px-3 sm:px-4 py-2 bg-white border-b-2 border-green-800 z-20 shrink-0 select-none flex flex-col justify-between gap-2 min-h-[78px]">
-        {/* Row 1: Left (HOME, CLS), Right (Month, Back) */}
-        <div className="flex items-center justify-between z-10">
+      <div className="relative p-2 sm:p-2.5 bg-white border-b-2 border-green-800 z-20 shrink-0 select-none flex flex-col gap-1.5 min-h-[76px] justify-between">
+        {/* Row 1: Left (HOME, CLS), Right (Month, Week, Day, Back) */}
+        <div className="flex items-center justify-between min-h-[38px] z-10">
           {/* Left: HOME & CLS Buttons */}
           <div className="flex items-center gap-1.5 sm:gap-2">
             <button 
               type="button"
               onClick={() => setView('nav')}
-              className="px-2.5 sm:px-3 py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[11px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
               title="Planner Navigation으로 이동"
             >
               HOME
@@ -138,26 +142,48 @@ export default function YearPage({ currentDate, setCurrentDate, setView, penStat
             <button 
               type="button"
               onClick={handleCls}
-              className="px-2.5 sm:px-3 py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[11px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
               title="저장 및 로그아웃 (Cover Page로 이동)"
             >
               CLS
             </button>
           </div>
 
-          {/* Right: Horizontal Nav Buttons */}
-          <div className="flex items-center gap-1.5">
+          {/* Right: Horizontal Nav Buttons (Month, Week, Day, Back) */}
+          <div className="flex items-center gap-1 sm:gap-1.5">
             <button 
               type="button"
               onClick={() => setView('month')}
-              className="px-2.5 sm:px-3 py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[11px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
             >
               Month
             </button>
             <button 
               type="button"
+              onClick={() => {
+                setCurrentDate(new Date());
+                setView('week');
+              }}
+              className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="This Week 페이지로 이동"
+            >
+              Week
+            </button>
+            <button 
+              type="button"
+              onClick={() => {
+                setCurrentDate(new Date());
+                setView('day-plan');
+              }}
+              className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="Today 페이지로 이동"
+            >
+              Day
+            </button>
+            <button 
+              type="button"
               onClick={() => setView('nav')}
-              className="px-2.5 sm:px-3 py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[11px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
             >
               Back
             </button>
@@ -174,14 +200,14 @@ export default function YearPage({ currentDate, setCurrentDate, setView, penStat
           </div>
         </div>
 
-        {/* Row 2: Left (- Year, + Year Buttons), Right (Event Add Mode Button) */}
-        <div className="flex items-center justify-between z-10">
-          {/* Left: - Year & + Year Buttons */}
+        {/* Row 2: Left (- Year, + Year, This Year Buttons), Right (Event Add Mode Button) */}
+        <div className="flex items-center justify-between pt-0.5 pb-0.5 z-10">
+          {/* Left: - Year, + Year & This Year Buttons */}
           <div className="flex items-center gap-1.5 sm:gap-2">
             <button 
               type="button"
               onClick={handlePrevYear}
-              className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow-xs rounded text-[11px] sm:text-xs font-bold text-blue-800 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10.5px] sm:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
               title="이전 연도로 이동"
             >
               - Year
@@ -189,10 +215,18 @@ export default function YearPage({ currentDate, setCurrentDate, setView, penStat
             <button 
               type="button"
               onClick={handleNextYear}
-              className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow-xs rounded text-[11px] sm:text-xs font-bold text-blue-800 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10.5px] sm:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
               title="다음 연도로 이동"
             >
               + Year
+            </button>
+            <button 
+              type="button"
+              onClick={handleThisYear}
+              className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10.5px] sm:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="올해(현재 연도)로 이동"
+            >
+              This Year
             </button>
           </div>
 

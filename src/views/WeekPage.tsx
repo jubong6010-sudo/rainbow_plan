@@ -127,6 +127,7 @@ export default function WeekPage({ currentDate, setCurrentDate, setView, penStat
 
   const handlePrev = () => setCurrentDate(subWeeks(currentDate, 1));
   const handleNext = () => setCurrentDate(addWeeks(currentDate, 1));
+  const handleThisWeek = () => setCurrentDate(new Date());
 
   const weekStart = startOfWeek(currentDate);
   const weekNumber = getWeek(currentDate);
@@ -194,7 +195,7 @@ export default function WeekPage({ currentDate, setCurrentDate, setView, penStat
             </div>
           </div>
 
-          {/* Right: Year, Month, Back buttons in 1 single row */}
+          {/* Right: Year, Month, Day, Back buttons in 1 single row */}
           <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 z-10">
             <button 
               type="button"
@@ -212,6 +213,17 @@ export default function WeekPage({ currentDate, setCurrentDate, setView, penStat
             </button>
             <button 
               type="button"
+              onClick={() => {
+                setCurrentDate(new Date());
+                setView('day-plan');
+              }} 
+              className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="Today 페이지로 이동"
+            >
+              Day
+            </button>
+            <button 
+              type="button"
               onClick={() => setView('nav')} 
               className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
             >
@@ -220,7 +232,7 @@ export default function WeekPage({ currentDate, setCurrentDate, setView, penStat
           </div>
         </div>
 
-        {/* 2. Sub-Header: -Week, +Week aligned to the left exactly like Day Plan's -Day, +Day */}
+        {/* 2. Sub-Header: -Week, +Week, This Week aligned to the left exactly like Day Plan */}
         <div className="flex items-center justify-between pt-0.5 pb-0.5 relative">
           <div className="flex items-center gap-1.5 sm:gap-2">
             <button 
@@ -238,6 +250,14 @@ export default function WeekPage({ currentDate, setCurrentDate, setView, penStat
               title="다음 주간으로 이동"
             >
               + Week
+            </button>
+            <button 
+              type="button"
+              onClick={handleThisWeek} 
+              className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10.5px] sm:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="이번 주(현재 주간)로 이동"
+            >
+              This Week
             </button>
           </div>
 

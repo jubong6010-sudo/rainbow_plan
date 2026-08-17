@@ -349,6 +349,7 @@ export default function DayContainer({ currentDate, setCurrentDate, viewState, s
 
   const handlePrev = () => setCurrentDate(subDays(currentDate, 1));
   const handleNext = () => setCurrentDate(addDays(currentDate, 1));
+  const handleToday = () => setCurrentDate(new Date());
   const dayOfWeekKr = ['일', '월', '화', '수', '목', '금', '토'][currentDate.getDay()];
 
   const handleOpenEventModal = (day: Date) => {
@@ -409,8 +410,19 @@ export default function DayContainer({ currentDate, setCurrentDate, viewState, s
             </div>
           </div>
 
-          {/* Right: Month, Week, Back buttons in 1 row */}
+          {/* Right: Year, Month, Week, Back buttons in 1 row */}
           <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 z-10">
+            <button 
+              type="button"
+              onClick={() => {
+                setCurrentDate(new Date());
+                setView('year');
+              }} 
+              className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="This Year 페이지로 이동"
+            >
+              Year
+            </button>
             <button 
               type="button"
               onClick={() => setView('month')} 
@@ -435,7 +447,7 @@ export default function DayContainer({ currentDate, setCurrentDate, viewState, s
           </div>
         </div>
 
-        {/* 2. Sub-Header: -Day, +Day shifted to left so they never overlap with Plan / Action / Diary on the right */}
+        {/* 2. Sub-Header: -Day, +Day, Today shifted to left */}
         <div className="flex items-center justify-between pt-0.5 pb-0.5 relative">
           <div className="flex items-center gap-1.5 sm:gap-2">
             <button 
@@ -453,6 +465,14 @@ export default function DayContainer({ currentDate, setCurrentDate, viewState, s
               title="다음 일자로 이동"
             >
               + Day
+            </button>
+            <button 
+              type="button"
+              onClick={handleToday} 
+              className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10.5px] sm:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="오늘 일자(Today)로 이동"
+            >
+              Today
             </button>
           </div>
 

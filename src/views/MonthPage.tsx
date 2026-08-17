@@ -141,112 +141,139 @@ export default function MonthPage({ currentDate, setCurrentDate, setView, penSta
     setView('cover');
   };
 
+  const handleThisMonth = () => {
+    setCurrentDate(new Date());
+  };
+
   return (
     <div className="h-full flex flex-col relative border-4 border-green-800 rounded-3xl bg-white shadow-md overflow-hidden select-none">
       {/* 1. Top Header Section */}
-      <div className="relative px-3 sm:px-4 py-2 flex items-center justify-between z-20 shrink-0 bg-white border-b border-gray-100 min-h-[44px]">
-        {/* Left: HOME & CLS Buttons */}
-        <div className="z-10 flex items-center gap-1.5 sm:gap-2">
-          <button 
-            type="button"
-            onClick={() => setView('nav')}
-            className="px-2.5 sm:px-3 py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[11px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
-            title="Planner Navigation으로 이동"
-          >
-            HOME
-          </button>
-          <button 
-            type="button"
-            onClick={handleCls}
-            className="px-2.5 sm:px-3 py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[11px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
-            title="저장 및 로그아웃 (Cover Page로 이동)"
-          >
-            CLS
-          </button>
+      <div className="relative p-2 sm:p-2.5 bg-white border-b-2 border-green-800 z-20 shrink-0 select-none flex flex-col gap-1.5 min-h-[76px] justify-between">
+        {/* Row 1: Left (HOME, CLS), Right (Year, Week, Day, Back) */}
+        <div className="flex items-center justify-between min-h-[38px] z-10">
+          {/* Left: HOME & CLS Buttons */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <button 
+              type="button"
+              onClick={() => setView('nav')}
+              className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="Planner Navigation으로 이동"
+            >
+              HOME
+            </button>
+            <button 
+              type="button"
+              onClick={handleCls}
+              className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="저장 및 로그아웃 (Cover Page로 이동)"
+            >
+              CLS
+            </button>
+          </div>
+
+          {/* Right: Horizontal Nav Buttons in 1 Row (Year, Week, Day, Back) */}
+          <div className="flex items-center gap-1 sm:gap-1.5">
+            <button 
+              type="button"
+              onClick={() => setView('year')}
+              className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+            >
+              Year
+            </button>
+            <button 
+              type="button"
+              onClick={() => {
+                setCurrentDate(new Date());
+                setView('week');
+              }}
+              className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="This Week 페이지로 이동"
+            >
+              Week
+            </button>
+            <button 
+              type="button"
+              onClick={() => {
+                setCurrentDate(new Date());
+                setView('day-plan');
+              }}
+              className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="Today 페이지로 이동"
+            >
+              Day
+            </button>
+            <button 
+              type="button"
+              onClick={() => setView('nav')}
+              className="px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10px] sm:text-[11px] md:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+            >
+              Back
+            </button>
+          </div>
         </div>
 
-        {/* Center: Title Box ("0000년 00월" exactly horizontally centered) */}
-        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center z-10">
-          <div className="relative border-2 border-blue-600 bg-[#fce8d5] px-8 sm:px-14 py-1 rounded-xs shadow-sm flex items-center justify-center">
+        {/* Center: Title Box ("8월" exactly horizontally centered and vertically centered between rows) */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex justify-center z-10 pointer-events-none">
+          <div className="relative border-2 border-blue-600 bg-[#fce8d5] px-8 sm:px-12 py-0.5 sm:py-1 rounded-xs shadow-sm flex items-center justify-center pointer-events-auto">
             <div className="absolute inset-1 border border-blue-400/80 pointer-events-none"></div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-blue-700 tracking-wide font-sans z-10">
-              {currentYear}년 {currentMonthNum}월
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-black tracking-wide font-sans z-10">
+              {currentMonthNum}월
             </h1>
           </div>
         </div>
 
-        {/* Right: Horizontal Nav Buttons in 1 Row (Year, Week, Back) */}
-        <div className="flex items-center gap-1 sm:gap-1.5 z-10">
-          <button 
-            type="button"
-            onClick={() => setView('year')}
-            className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[10.5px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
-          >
-            Year
-          </button>
-          <button 
-            type="button"
-            onClick={() => setView('week')}
-            className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[10.5px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
-          >
-            Week
-          </button>
-          <button 
-            type="button"
-            onClick={() => setView('nav')}
-            className="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[10.5px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
-          >
-            Back
-          </button>
-        </div>
-      </div>
+        {/* Row 2: Left (- Month, + Month, This Month), Right (Schedule Add Mode Button) */}
+        <div className="flex items-center justify-between pt-0.5 pb-0.5 z-10">
+          {/* Left: - Month, + Month & This Month Buttons */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <button 
+              type="button"
+              onClick={handlePrevMonth}
+              className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10.5px] sm:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="이전 달로 이동"
+            >
+              - Month
+            </button>
+            <button 
+              type="button"
+              onClick={handleNextMonth}
+              className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10.5px] sm:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="다음 달로 이동"
+            >
+              + Month
+            </button>
+            <button 
+              type="button"
+              onClick={handleThisMonth}
+              className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 shadow rounded font-bold text-blue-700 text-[10.5px] sm:text-xs active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
+              title="이번 달(현재 월)로 이동"
+            >
+              This Month
+            </button>
+          </div>
 
-      {/* 2. Sub-header: - Month, + Month & Schedule Add Mode Button */}
-      <div className="relative px-3 sm:px-4 py-1.5 flex items-center justify-between z-20 shrink-0 bg-white border-b border-gray-200 min-h-[38px]">
-        {/* Left spacer for symmetry */}
-        <div className="w-10 sm:w-20 hidden md:block"></div>
-
-        {/* Center: - Month & + Month */}
-        <div className="md:absolute md:left-1/2 md:-translate-x-1/2 flex items-center gap-1.5 sm:gap-2 z-10">
-          <button 
-            type="button"
-            onClick={handlePrevMonth}
-            className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow-xs rounded text-[11px] sm:text-xs font-bold text-blue-800 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
-            title="이전 달로 이동"
-          >
-            - Month
-          </button>
-          <button 
-            type="button"
-            onClick={handleNextMonth}
-            className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow-xs rounded text-[11px] sm:text-xs font-bold text-blue-800 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5"
-            title="다음 달로 이동"
-          >
-            + Month
-          </button>
-        </div>
-
-        {/* Right: Schedule / Event Add Mode Toggle moved completely to the right */}
-        <div className="flex items-center gap-2 ml-auto z-10">
-          {isEventAddMode && (
-            <div className="animate-bounce flex items-center gap-1 px-2 sm:px-2.5 py-0.5 bg-yellow-300 text-blue-950 font-bold text-[10.5px] sm:text-xs rounded-full border border-yellow-400 shadow-xs">
-              <span>👉</span>
-              <span>날짜를 선택하세요</span>
-            </div>
-          )}
-          <button
-            type="button"
-            onClick={toggleEventAddMode}
-            className={cn(
-              "px-2.5 sm:px-3 py-1 rounded shadow-2xs text-[11px] sm:text-xs font-bold border transition-all cursor-pointer flex items-center gap-1 active:scale-95",
-              isEventAddMode 
-                ? "bg-blue-600 text-white border-blue-700 ring-2 ring-blue-300" 
-                : "border-blue-400 bg-blue-50 text-blue-900 hover:bg-blue-600 hover:text-white"
+          {/* Right: Schedule / Event Add Mode Toggle */}
+          <div className="flex items-center gap-2 ml-auto">
+            {isEventAddMode && (
+              <div className="animate-bounce flex items-center gap-1 px-2 sm:px-2.5 py-0.5 bg-yellow-300 text-blue-950 font-bold text-[10.5px] sm:text-xs rounded-full border border-yellow-400 shadow-xs">
+                <span>👉</span>
+                <span>날짜를 선택하세요</span>
+              </div>
             )}
-            title={isEventAddMode ? "일정 추가 모드 켜짐 (날짜를 선택하세요)" : "일정 추가 모드 켜기"}
-          >
-            <span>📅 일정 추가</span>
-          </button>
+            <button
+              type="button"
+              onClick={toggleEventAddMode}
+              className={cn(
+                "px-2.5 sm:px-3 py-1 rounded shadow-2xs text-[11px] sm:text-xs font-bold border transition-all cursor-pointer flex items-center gap-1 active:scale-95",
+                isEventAddMode 
+                  ? "bg-blue-600 text-white border-blue-700 ring-2 ring-blue-300" 
+                  : "border-blue-400 bg-blue-50 text-blue-900 hover:bg-blue-600 hover:text-white"
+              )}
+              title={isEventAddMode ? "일정 추가 모드 켜짐 (날짜를 선택하세요)" : "일정 추가 모드 켜기"}
+            >
+              <span>📅 일정 추가</span>
+            </button>
+          </div>
         </div>
       </div>
 

@@ -20,6 +20,22 @@ export default function NavigationPage({ setView, setCurrentDate }: NavigationPa
 
   const [showUploadMenu, setShowUploadMenu] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowUploadMenu(false);
+      }
+    };
+    if (showUploadMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showUploadMenu]);
 
   const handleYearClick = () => {
     setCurrentDate(new Date());
@@ -89,47 +105,45 @@ export default function NavigationPage({ setView, setCurrentDate }: NavigationPa
     <button 
       type="button"
       onClick={onClick}
-      className="w-full max-w-[170px] sm:max-w-[190px] py-3.5 sm:py-4 bg-gradient-to-b from-white via-sky-50/50 to-slate-100 border-2 border-blue-400/80 rounded-xl shadow-md font-bold text-blue-950 text-base sm:text-lg active:translate-y-px hover:shadow-lg hover:border-blue-600 transition-all cursor-pointer select-none"
+      className="w-full max-w-[170px] sm:max-w-[190px] py-3.5 sm:py-4 bg-gradient-to-b from-white via-sky-50/70 to-slate-100 border-2 border-blue-400/90 rounded-xl shadow-md font-bold text-blue-950 text-base sm:text-lg active:translate-y-px hover:shadow-lg hover:border-blue-600 transition-all cursor-pointer select-none"
     >
       {label}
     </button>
   );
 
   return (
-    <div className="h-full w-full bg-[#f0f6fc] flex items-center justify-center relative p-2 sm:p-4 select-none overflow-hidden">
-      {/* Outer subtle frame */}
-      <div className="absolute inset-2 border-4 border-green-800 rounded-3xl pointer-events-none z-30 shadow-inner"></div>
-
-      {/* Main card container with very soft light blue background & uploaded/default frame image */}
-      <div className="relative w-full h-full max-w-2xl rounded-2xl overflow-hidden flex flex-col items-center justify-between p-4 sm:p-8 bg-[#f5f9fd] shadow-md border border-blue-100">
+    <div className="h-full w-full bg-[#f0f6fc] flex items-center justify-center relative p-2 sm:p-3 select-none overflow-hidden">
+      {/* Outer frame matching planner design */}
+      <div className="h-full w-full border-4 border-green-800 rounded-3xl bg-white shadow-md relative overflow-hidden flex flex-col justify-between p-3 sm:p-5">
         
-        {/* Background Image Layer (soft blend on pale light blue) */}
+        {/* Background Image Layer (Stretches width and height directly to match screen frame dimensions) */}
         {bgImage && (
-          <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center">
+          <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
             <img 
               src={bgImage} 
               alt="Navigation Background" 
-              className="w-full h-full object-contain object-center opacity-95"
+              className="w-full h-full object-fill transition-all duration-200"
               referrerPolicy="no-referrer"
             />
+            {/* Soft overlay gradient to ensure high readability and contrast */}
+            <div className="absolute inset-0 bg-white/25 backdrop-blur-[0.5px]"></div>
           </div>
         )}
 
-        {/* Soft background light blue overlay gradient to ensure high readability */}
-        <div className="absolute inset-0 bg-radial from-transparent via-[#f5f9fd]/10 to-[#eaf2fb]/40 pointer-events-none z-0"></div>
-
-        {/* Top Control Bar: CLS button on left, Background upload & custom image tools on right */}
-        <div className="w-full flex items-center justify-between gap-2 relative z-20">
+        {/* Top Bar: Left (CLS Button), Right (배경이미지 Button) */}
+        <div className="w-full flex items-center justify-between z-20 shrink-0">
+          {/* Top Left: CLS Button */}
           <button
             type="button"
             onClick={handleCls}
-            className="px-3 py-1 bg-white/85 backdrop-blur border border-blue-300 hover:border-blue-500 text-blue-900 rounded shadow-xs text-xs font-bold active:translate-y-0.5 cursor-pointer transition-all hover:bg-white flex items-center gap-1"
+            className="px-2.5 sm:px-3 py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[11px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5 flex items-center gap-1"
             title="저장 및 로그아웃 (Cover Page로 이동)"
           >
             <span>CLS</span>
           </button>
 
-          <div className="flex items-center gap-2">
+          {/* Top Right: 배경이미지 Button */}
+          <div className="flex items-center gap-2" ref={menuRef}>
             <input 
               type="file" 
               ref={fileInputRef} 
@@ -141,25 +155,25 @@ export default function NavigationPage({ setView, setCurrentDate }: NavigationPa
               <button
                 type="button"
                 onClick={() => setShowUploadMenu(!showUploadMenu)}
-                className="px-2.5 py-1 bg-white/80 backdrop-blur border border-blue-200 text-blue-800 rounded shadow-xs text-[11px] font-semibold flex items-center gap-1.5 hover:bg-white active:translate-y-0.5 cursor-pointer transition-all"
-                title="배경 이미지 설정"
+                className="px-2.5 sm:px-3 py-1 bg-gray-200 hover:bg-gray-300 border border-gray-300 shadow rounded text-[11px] sm:text-xs font-bold text-blue-700 active:bg-gray-400 cursor-pointer transition-all active:translate-y-0.5 flex items-center gap-1.5"
+                title="배경이미지 변경 및 설정"
               >
-                <ImageIcon className="w-3.5 h-3.5 text-blue-600" />
-                <span>배경 이미지</span>
+                <ImageIcon className="w-3.5 h-3.5 text-blue-700" />
+                <span>배경이미지</span>
               </button>
 
               {showUploadMenu && (
-                <div className="absolute right-0 mt-1 w-44 bg-white rounded-lg shadow-xl border border-gray-200 py-1.5 z-40 flex flex-col text-xs">
+                <div className="absolute right-0 mt-1.5 w-48 bg-white/95 backdrop-blur-md rounded-lg shadow-xl border border-blue-200 py-1.5 z-50 flex flex-col text-xs animate-in fade-in zoom-in-95 duration-100">
                   <button
                     type="button"
                     onClick={() => {
                       fileInputRef.current?.click();
                       setShowUploadMenu(false);
                     }}
-                    className="px-3 py-1.5 text-left text-gray-700 hover:bg-blue-50 flex items-center gap-2 cursor-pointer font-medium"
+                    className="px-3 py-2 text-left text-gray-800 hover:bg-blue-50 flex items-center gap-2 cursor-pointer font-semibold transition-colors"
                   >
-                    <Upload className="w-3.5 h-3.5 text-blue-600" />
-                    <span>새 이미지 업로드</span>
+                    <Upload className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span>새 배경이미지 업로드</span>
                   </button>
                   <button
                     type="button"
@@ -167,10 +181,10 @@ export default function NavigationPage({ setView, setCurrentDate }: NavigationPa
                       handleResetBg();
                       setShowUploadMenu(false);
                     }}
-                    className="px-3 py-1.5 text-left text-gray-700 hover:bg-blue-50 flex items-center gap-2 cursor-pointer font-medium border-t border-gray-100"
+                    className="px-3 py-2 text-left text-gray-700 hover:bg-blue-50 flex items-center gap-2 cursor-pointer font-medium border-t border-gray-100 transition-colors"
                   >
-                    <RotateCcw className="w-3.5 h-3.5 text-blue-600" />
-                    <span>기본 블루 프레임 복원</span>
+                    <RotateCcw className="w-4 h-4 text-gray-500 shrink-0" />
+                    <span>기본 배경으로 복원</span>
                   </button>
                 </div>
               )}
@@ -183,8 +197,8 @@ export default function NavigationPage({ setView, setCurrentDate }: NavigationPa
           
           {/* Banner Title with clean soft blue styling */}
           <div className="relative w-full max-w-xs sm:max-w-sm">
-            <div className="relative z-10 bg-gradient-to-r from-sky-50 via-blue-50 to-sky-50 border-2 border-blue-400/80 py-3 sm:py-3.5 px-6 sm:px-8 text-center rounded-lg shadow-md">
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-blue-950 tracking-wide">
+            <div className="relative z-10 bg-white/90 backdrop-blur-xs border-2 border-blue-400/90 py-3 sm:py-3.5 px-6 sm:px-8 text-center rounded-lg shadow-md">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-blue-950 tracking-wide font-sans">
                 Planner Navigation
               </h1>
             </div>
@@ -201,10 +215,10 @@ export default function NavigationPage({ setView, setCurrentDate }: NavigationPa
         </div>
 
         {/* Bottom Setting Button */}
-        <div className="relative z-20 pb-1 sm:pb-2">
+        <div className="relative z-20 pb-1 flex justify-center">
           <button 
             type="button"
-            className="px-10 sm:px-12 py-2 sm:py-2.5 bg-gradient-to-b from-white to-blue-50/80 border-2 border-blue-300 rounded-xl shadow-md font-bold text-blue-950 text-sm sm:text-base active:translate-y-px hover:shadow-lg hover:border-blue-500 transition-all cursor-pointer select-none"
+            className="px-10 sm:px-12 py-2 sm:py-2.5 bg-white/90 backdrop-blur-xs border-2 border-blue-300 rounded-xl shadow-md font-bold text-blue-950 text-sm sm:text-base active:translate-y-px hover:shadow-lg hover:border-blue-500 transition-all cursor-pointer select-none"
           >
             Setting
           </button>
